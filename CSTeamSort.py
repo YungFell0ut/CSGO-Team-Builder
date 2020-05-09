@@ -1,8 +1,17 @@
 import random
 import socket
 
-def ServerSetup():
-    pass
+def Server():
+    ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4, TCP
+    ServerSocket.bind((socket.gethostname(), 1337))  # Connect on the most elite port
+    ServerSocket.listen(10)  # Ten clients can connect
+
+    while True:
+        ClientSocket, address = ServerSocket.accept()
+        print(f"{address} has connected!")
+        ClientSocket.send(TeamOneMsg.encode("utf-8"))
+
+
 
 def Setup():
     global players
@@ -16,9 +25,14 @@ def Setup():
 def TeamSort(gamers):
     global TeamOne
     global TeamTwo
+    global TeamOneMsg
+    global TeamTwoMsg
 
     TeamOne = []
     TeamTwo = []
+
+    TeamOneMsg = ""
+    TeamTwoMsg = ""
 
     TeamOne = random.sample(gamers, 5)
 
@@ -27,6 +41,15 @@ def TeamSort(gamers):
         gamers.remove(TeamOne[i])
 
     TeamTwo = random.sample(gamers, 5)
+
+    #  Puts the teams into a string format to send over the network.
+    for i in range(len(TeamOne)):
+        TeamOneMsg += f"Player {i + 1} on team one is: {TeamOne[i]}"
+        TeamOneMsg += "\n"
+
+    for i in range(len(TeamTwo)):
+        TeamTwoMsg += f"Player {i + 1} on team two is: {TeamTwo[i]}"
+        TeamTwoMsg += "\n"
 
     # Print the two teams out
     print("\n")
@@ -53,3 +76,4 @@ def MapSort():
 Setup()
 TeamSort(players)
 MapSort()
+Server()
