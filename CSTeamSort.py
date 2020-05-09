@@ -10,6 +10,9 @@ def Server():
         ClientSocket, address = ServerSocket.accept()
         print(f"{address} has connected!")
         ClientSocket.send(TeamOneMsg.encode("utf-8"))
+        ClientSocket.send(TeamTwoMsg.encode("utf-8"))
+        ClientSocket.send(MapsMsg.encode("utf-8"))
+
 
 
 
@@ -64,13 +67,20 @@ def TeamSort(gamers):
 
 def MapSort():
     global PlayMaps
+    global MapsMsg
+
     PlayMaps = []
+    MapsMsg = "\n"
 
     Maps = ["Dust II", "Office", "Mirage", "Inferno", "Overpass", "Nuke", "Italy", "Militia"]
 
     PlayMaps = random.sample(Maps, 3)
 
-    print(f"The maps are {PlayMaps[0]}, {PlayMaps[1]}, {PlayMaps[2]}")
+    for i in range(len(PlayMaps)):
+        MapsMsg += f"Map {i + 1} will be {PlayMaps[i]}"
+        MapsMsg += "\n"
+
+    print(f"\nThe maps are {PlayMaps[0]}, {PlayMaps[1]}, {PlayMaps[2]}")
 
 
 Setup()
